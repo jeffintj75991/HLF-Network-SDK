@@ -1,0 +1,55 @@
+
+//Private submit transactions
+
+localhost:9000/demoapp/v1.0/HLF/submitTransactions
+
+{
+    "chaincodeName": "test-private-cc-1",
+    "methodName": "saveDetails",
+    "channelName": "mychannel",
+    "isTransient":"true",
+    "transientKey":"payload",
+    "transientValue":"PAYLOAD FROM SDK",
+	"inputParameters": ["org-collection","PRV000904", "{\"Name\": \"John\", \"Place\": \"India\"}"]
+}
+
+//private querying
+
+localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-private-cc-1&methodName=getDetails&channelName=mychannel&value=org-collection&value=PRV000904
+
+//Public submit transactions
+{
+    "chaincodeName": "test-public-cc-1",
+    "methodName": "saveDetails",
+    "channelName": "mychannel",
+    "isTransient":"false",
+    "transientKey":"payload",
+    "transientValue":"PAYLOAD FROM SDK",
+	"inputParameters": ["PUB000902", "{\"Name\": \"John\", \"Place\": \"India\"}"]
+}
+
+//public querying
+
+localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-public-cc-1&methodName=getDetails&channelName=mychannel&value=PUB000902
+
+//for getting block height
+
+localhost:9000/demoapp/v1.0/HLF/getBlockHeight?channelName=mychannel
+
+//for subscribing events
+
+localhost:9000/demoapp/v1.0/HLF/subscribeEvent
+
+{
+    "eventNameList": ["savePrivateDetails"],
+    "channelName": "mychannel",
+    "chaincode": "test-private-cc-1",
+    "startBlockNumber":10,
+    "endBlockNumber":20
+}
+
+
+//Run jar file as a service
+nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 &
+
+
