@@ -12,3 +12,5 @@ Block events <br>
 Chaincode events <br>
 Transaction events <br>
 In this implementation, chaincode events are used, and event capturing takes place at the Fabric SDK level
+<br>
+The commands and request formats required for the project are detailed in a separate file named commands_and_request
