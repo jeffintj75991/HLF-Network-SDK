@@ -1,7 +1,20 @@
+For running the Hyperledger fabric network project:<br>
+./start-network.sh
+<br>
 
-//Private submit transactions
+To run the SDK, follow these steps: <br>
+1.Build the project using IntelliJ or any other IDE. <br>
+2.Generate the jar file. <br>
+3.Run the jar file using the following command (to run as a background service): <br>
+nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 & <br>
+<br>
+Request Formats <br>
+You can utilize Postman or a similar tool to dispatch the request  <br>
 
-localhost:9000/demoapp/v1.0/HLF/submitTransactions
+//Private submit transactions <br>
+
+POST <br>
+localhost:9000/demoapp/v1.0/HLF/submitTransactions <br>
 
 {
     "chaincodeName": "test-private-cc-1",
@@ -13,11 +26,12 @@ localhost:9000/demoapp/v1.0/HLF/submitTransactions
 	"inputParameters": ["org-collection","PRV000904", "{\"Name\": \"John\", \"Place\": \"India\"}"]
 }
 
-//private querying
-
+//private querying <br>
+GET <br>
 localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-private-cc-1&methodName=getDetails&channelName=mychannel&value=org-collection&value=PRV000904
-
-//Public submit transactions
+<br>
+POST <br>
+//Public submit transactions <br>
 {
     "chaincodeName": "test-public-cc-1",
     "methodName": "saveDetails",
@@ -27,17 +41,17 @@ localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-private-cc-1&
     "transientValue":"PAYLOAD FROM SDK",
 	"inputParameters": ["PUB000902", "{\"Name\": \"John\", \"Place\": \"India\"}"]
 }
-
-//public querying
-
+<br>
+GET  <br>
+//public querying <br>
 localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-public-cc-1&methodName=getDetails&channelName=mychannel&value=PUB000902
-
-//for getting block height
-
+<br>
+GET <br>
+//for getting block height <br>
 localhost:9000/demoapp/v1.0/HLF/getBlockHeight?channelName=mychannel
-
-//for subscribing events
-
+<br>
+POST <br>
+//for subscribing events <br>
 localhost:9000/demoapp/v1.0/HLF/subscribeEvent
 
 {
