@@ -62,7 +62,4 @@ localhost:9000/demoapp/v1.0/HLF/subscribeEvent
 }
 
 
-//Run jar file as a service
-nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 &
-
 
