@@ -2,11 +2,11 @@ For running the Hyperledger fabric network project:<br>
 ./start-network.sh
 <br>
 
-To run the SDK, follow these steps: <br>
-1.Build the project using IntelliJ or any other IDE. <br>
-2.Generate the jar file. <br>
-3.Run the jar file using the following command (to run as a background service): <br>
-nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 & <br>
+To run the SDK, follow these steps:
+1.Build the project using IntelliJ or any other IDE. 
+2.Generate the jar file.
+3.Run the jar file using the following command (to run as a background service): 
+nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 & 
 <br>
 Request Formats <br>
 You can utilize Postman or a similar tool to dispatch the request  <br>
