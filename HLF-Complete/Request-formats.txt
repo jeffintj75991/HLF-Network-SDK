@@ -1,20 +1,19 @@
 For running the Hyperledger fabric network project:<br>
 ./start-network.sh
-<br>
 
 To run the SDK, follow these steps:
 1.Build the project using IntelliJ or any other IDE. 
 2.Generate the jar file.
 3.Run the jar file using the following command (to run as a background service): 
 nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 & 
-<br>
-Request Formats <br>
-You can utilize Postman or a similar tool to dispatch the request  <br>
 
-//Private submit transactions <br>
+Request Formats
+You can utilize Postman or a similar tool to dispatch the request  
 
-POST <br>
-localhost:9000/demoapp/v1.0/HLF/submitTransactions <br>
+//Private submit transactions
+
+POST 
+localhost:9000/demoapp/v1.0/HLF/submitTransactions 
 
 {
     "chaincodeName": "test-private-cc-1",
@@ -26,12 +25,12 @@ localhost:9000/demoapp/v1.0/HLF/submitTransactions <br>
 	"inputParameters": ["org-collection","PRV000904", "{\"Name\": \"John\", \"Place\": \"India\"}"]
 }
 
-//private querying <br>
-GET <br>
+//private querying 
+GET 
 localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-private-cc-1&methodName=getDetails&channelName=mychannel&value=org-collection&value=PRV000904
-<br>
-POST <br>
-//Public submit transactions <br>
+
+POST 
+//Public submit transactions 
 {
     "chaincodeName": "test-public-cc-1",
     "methodName": "saveDetails",
@@ -41,17 +40,17 @@ POST <br>
     "transientValue":"PAYLOAD FROM SDK",
 	"inputParameters": ["PUB000902", "{\"Name\": \"John\", \"Place\": \"India\"}"]
 }
-<br>
-GET  <br>
-//public querying <br>
+
+GET  
+//public querying 
 localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-public-cc-1&methodName=getDetails&channelName=mychannel&value=PUB000902
-<br>
-GET <br>
-//for getting block height <br>
+
+GET 
+//for getting block height 
 localhost:9000/demoapp/v1.0/HLF/getBlockHeight?channelName=mychannel
-<br>
-POST <br>
-//for subscribing events <br>
+
+POST 
+//for subscribing events 
 localhost:9000/demoapp/v1.0/HLF/subscribeEvent
 
 {
