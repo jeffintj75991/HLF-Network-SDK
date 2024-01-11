@@ -1,4 +1,4 @@
-For running the Hyperledger fabric network project:<br>
+For running the Hyperledger fabric network project:
 ./start-network.sh
 
 To run the SDK, follow these steps:
