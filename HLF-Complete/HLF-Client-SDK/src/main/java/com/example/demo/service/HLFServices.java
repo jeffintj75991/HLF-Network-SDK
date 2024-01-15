@@ -57,7 +57,7 @@ public class HLFServices {
     private Map<String, EventSubscriberRequest> subscriptionRequestMap = new ConcurrentHashMap<>();
 
     private final ExecutorService singleTreadExecutor = Executors.newSingleThreadExecutor();
-    private Map<String, CloseableIterator<Block>> subscribeObjectMap = new ConcurrentHashMap<>();
+    private Map<String, String> subscribeObjectMap = new ConcurrentHashMap<>();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -96,8 +96,10 @@ public class HLFServices {
             long diffInTime = endTime.getTime() - startTime.getTime();
             log.debug("POST:Time difference (ms):" + diffInTime);
             log.debug("response:" + new String(ccResponse, StandardCharsets.UTF_8));
-
-            return new String(ccResponse, StandardCharsets.UTF_8);
+            JSONObject result = new JSONObject();
+            result.put("Chaincode-response",new String(ccResponse, StandardCharsets.UTF_8));
+            return result.toString();
+            //return new String(ccResponse, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.debug("HLF submitTransactions exception:" + e);
             throw new DemoAppException("HLF submitTransactions exception:" + e);
@@ -138,7 +140,14 @@ public class HLFServices {
                 CompletableFuture.runAsync(() -> {
                     subscribeContractEvents(eventSubscribeRequest);
                 });
-            return subscriptionId;
+            JSONObject result = new JSONObject();
+            result.put("subscriptionId",subscriptionId);
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
+
+            subscribeObjectMap.put("ChaincodeSubscriptions-" +
+                    "startBlock-:"+eventSubscribeRequest.getStartBlockNumber()+
+                    ",EndBlock-:"+eventSubscribeRequest.getEndBlockNumber()+",Time:"+timeStamp,subscriptionId);
+            return result.toString();
         } catch (Exception e) {
             log.debug("subscribeEvents exception:" + e);
             throw new DemoAppException("subscribeEvents exception:" + e);
@@ -189,7 +198,10 @@ public class HLFServices {
 
     public String getEventSubscribeList() {
         log.debug("FabricEventListener:subscribeObjectMap :" + subscribeObjectMap.toString());
-        return subscribeObjectMap.keySet().toString();
+        JSONObject result = new JSONObject();
+        result.put("SubscriptionList",subscribeObjectMap.keySet().toString());
+        return result.toString();
+        //return subscribeObjectMap.keySet().toString();
 
     }
 
@@ -199,7 +211,7 @@ public class HLFServices {
         return timeStamp + randomNumber;
     }
 
-    public Long getBlockHeight(String channelName) {
+    public String getBlockHeight(String channelName) {
         try {
             log.debug("getTransactions:start");
             log.debug("channelName:" + channelName);
@@ -209,7 +221,9 @@ public class HLFServices {
             BlockchainInfo info = BlockchainInfo.parseFrom(resultTran);
             long blockHeight = info.getHeight();
             log.debug("blockHeight :" + blockHeight);
-            return blockHeight;
+            JSONObject result = new JSONObject();
+            result.put("blockHeight",blockHeight);
+            return result.toString();
         } catch (Exception e) {
             log.debug("HLF getBlockHeight exception:" + e);
             throw new DemoAppException("HLF getBlockHeight exception:" + e);
