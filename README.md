@@ -1,7 +1,7 @@
 # HLF-Network-SDK
 A full stack Hyperledger fabric application
 <br>
-In this project,a full stack Hyperledger fabric application is implemented with a Hyperledger Fabric network, a Spring Boot-based customized Fabric SDK and a front end based on react.js. <br>
+In this project,a full stack Hyperledger fabric application is implemented with Hyperledger Fabric network, Spring Boot-based customized Fabric SDK , front end based on react.js and H2 database <br>
  The Hyperledger Fabric network consists of 3 organizations, their corresponding certificate authorities, and 3 orderers.
 <br>
 There are two types of chaincodes: <br>
@@ -12,6 +12,6 @@ Both public and private chaincodes are implemented in the project.<br>
 Block events <br>
 Chaincode events <br>
 Transaction events <br>
-In this implementation, chaincode events are used, and event capturing takes place at the Fabric SDK level
+In this implementation, chaincode events are used, and event capturing takes place at the Fabric SDK level.The data from the events are stored in the H2 database.
 <br>
 The commands and request formats required for the project are detailed in a separate file named commands_and_request
