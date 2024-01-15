@@ -95,7 +95,7 @@ public class DemoApi {
      * @return
      */
     @GetMapping(value = "/HLF/getBlockHeight", produces = "application/json; charset=utf-8")
-    public Long hlfBlockHeight(@RequestParam(name = "channelName", required = true) String channelName) {
+    public String hlfBlockHeight(@RequestParam(name = "channelName", required = true) String channelName) {
         try {
             return hLFServices.getBlockHeight(channelName);
         } catch (Exception e) {
