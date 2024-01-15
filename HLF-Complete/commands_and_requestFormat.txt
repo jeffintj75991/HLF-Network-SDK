@@ -8,14 +8,15 @@ To run the SDK, follow these steps:
 3.Run the jar file using the following command (to run as a background service): 
 nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=application.properties -Dserver.port=9000 & 
 
-Request Formats
-You can utilize Postman or a similar tool to dispatch the request  
+To run the UI:
+cd HLF-Frontend-UI
+//first time
+npm install
+npm start
+
+Request Formats:
 
 //Private submit transactions
-
-POST 
-localhost:9000/demoapp/v1.0/HLF/submitTransactions 
-
 {
     "chaincodeName": "test-private-cc-1",
     "methodName": "saveDetails",
@@ -27,10 +28,14 @@ localhost:9000/demoapp/v1.0/HLF/submitTransactions
 }
 
 //private querying 
-GET 
-localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-private-cc-1&methodName=getDetails&channelName=mychannel&value=org-collection&value=PRV000904
+{
+    "chaincodeName": "test-private-cc-1",
+    "methodName": "getDetails",
+    "channelName": "mychannel",
+    "value": ["org-collection", "PRV000904"]
+}
 
-POST 
+ 
 //Public submit transactions 
 {
     "chaincodeName": "test-public-cc-1",
@@ -42,18 +47,17 @@ POST
 	"inputParameters": ["PUB000902", "{\"Name\": \"John\", \"Place\": \"India\"}"]
 }
 
-GET  
+  
 //public querying 
-localhost:9000/demoapp/v1.0/HLF/getTransactions?chaincodeName=test-public-cc-1&methodName=getDetails&channelName=mychannel&value=PUB000902
+{
+    "chaincodeName": "test-public-cc-1",
+    "methodName": "getDetails",
+    "channelName": "mychannel",
+    "value": "PUB0001"
+}
 
-GET 
-//for getting block height 
-localhost:9000/demoapp/v1.0/HLF/getBlockHeight?channelName=mychannel
-
-POST 
+ 
 //for subscribing events 
-localhost:9000/demoapp/v1.0/HLF/subscribeEvent
-
 {
     "eventNameList": ["savePrivateDetails"],
     "channelName": "mychannel",
