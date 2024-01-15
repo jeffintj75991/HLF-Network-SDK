@@ -10,7 +10,7 @@ nohup java -jar HLF-Java-SDK-demo-0.0.1-SNAPSHOT.jar -Dspring.config.location=ap
 
 To run the UI:
 cd HLF-Frontend-UI
-//For getting node modules(Execute the command only once.)
+//For getting node modules(Execute the command only once)
 npm install
 npm start
 
