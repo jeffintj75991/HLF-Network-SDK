@@ -6,8 +6,8 @@ In this project,a full stack Hyperledger fabric application is implemented with 
 <br>
 There are two types of chaincodes: <br>
 Public chaincodes: Transactions visible to all participants in the network. <br>
-Private chaincodes: Transactions visible only to the participants involved in the transactions. <br>
-Both public and private chaincodes are implemented in the project.<br>
+Chaincodes using Private Data collections: Transactions visible only to the participants involved in the transactions. <br>
+Both types of chaincodes are implemented in the project.<br>
  Most implementations with a blockchain component also have an off-chain component, making it essential to transfer data from on-chain to off-chain parts. This is achieved by emitting events when a transaction occurs. There are three main types of events:<br>
 Block events <br>
 Chaincode events <br>
