@@ -1,7 +1,7 @@
 # HLF-Network-SDK
 A full stack Hyperledger fabric application
 <br>
-In this project,a full stack Hyperledger fabric application is implemented with Hyperledger Fabric network, Spring Boot-based customized Fabric SDK , front end based on react.js and H2 database <br>
+In this project,a full stack Hyperledger fabric application is implemented with Hyperledger Fabric network, Spring Boot-based customized Fabric SDK , front end based on React and H2 database <br>
  The Hyperledger Fabric network consists of 3 organizations, their corresponding certificate authorities, and 3 orderers.
 <br>
 There are two types of chaincodes: <br>
