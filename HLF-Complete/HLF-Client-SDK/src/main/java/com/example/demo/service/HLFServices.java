@@ -4,25 +4,28 @@ import com.example.demo.config.HLFConnection;
 import com.example.demo.exception.DemoAppException;
 import com.example.demo.model.EventSubscriberRequest;
 import com.example.demo.model.HLFPostRequest;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
-import org.hyperledger.fabric.client.*;
-import org.hyperledger.fabric.protos.common.Block;
+import org.hyperledger.fabric.client.Contract;
+import org.hyperledger.fabric.client.Network;
+import org.hyperledger.fabric.client.Proposal;
 import org.hyperledger.fabric.protos.common.BlockchainInfo;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -31,24 +34,12 @@ import java.util.concurrent.Executors;
 @Service
 @Slf4j
 public class HLFServices {
-
-    @Value("${hlf.connection.pool.eviction}")
-    private Long poolEvictionInterval;
-
-    @Value("${hlf.connection.pool.maxTotal}")
-    private Integer maxTotal;
-
-    @Value("${hlf.connection.pool.maxIdle}")
-    private Integer maxIdle;
-
-    @Value("${hlf.connection.pool.minIdle}")
-    private Integer minIdle;
-
-    @Value("${hlf.connection.pool.maxWaitMillis}")
-    private Long maxWaitMillis;
-
+    
     @Autowired
     HLFConnection hLFConnection;
+
+    @Autowired
+    DBServices dBServices;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -97,7 +88,7 @@ public class HLFServices {
             log.debug("POST:Time difference (ms):" + diffInTime);
             log.debug("response:" + new String(ccResponse, StandardCharsets.UTF_8));
             JSONObject result = new JSONObject();
-            result.put("Chaincode-response",new String(ccResponse, StandardCharsets.UTF_8));
+            result.put("Chaincode-response", new String(ccResponse, StandardCharsets.UTF_8));
             return result.toString();
             //return new String(ccResponse, StandardCharsets.UTF_8);
         } catch (Exception e) {
@@ -131,22 +122,22 @@ public class HLFServices {
             throw new DemoAppException("HLF getTransactions exception:" + e);
         }
     }
-    
+
     public String subscribeEvents(EventSubscriberRequest eventSubscribeRequest) {
         log.debug("EventSubscribeRequest: {}", eventSubscribeRequest);
         try {
             String subscriptionId = this.subscriptionIdGenerator();
-                log.debug("EventType:CONTRACT");
-                CompletableFuture.runAsync(() -> {
-                    subscribeContractEvents(eventSubscribeRequest);
-                });
+            log.debug("EventType:CONTRACT");
+            CompletableFuture.runAsync(() -> {
+                subscribeContractEvents(eventSubscribeRequest);
+            });
             JSONObject result = new JSONObject();
-            result.put("subscriptionId",subscriptionId);
+            result.put("subscriptionId", subscriptionId);
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
 
             subscribeObjectMap.put("ChaincodeSubscriptions-" +
-                    "startBlock-:"+eventSubscribeRequest.getStartBlockNumber()+
-                    ",EndBlock-:"+eventSubscribeRequest.getEndBlockNumber()+",Time:"+timeStamp,subscriptionId);
+                    "startBlock-:" + eventSubscribeRequest.getStartBlockNumber() +
+                    ",EndBlock-:" + eventSubscribeRequest.getEndBlockNumber() + ",Time:" + timeStamp, subscriptionId);
             return result.toString();
         } catch (Exception e) {
             log.debug("subscribeEvents exception:" + e);
@@ -158,8 +149,8 @@ public class HLFServices {
     private void subscribeContractEvents(EventSubscriberRequest eventSubscribeRequest) {
         try {
             Network netObj = hLFConnection.connectionCreation(eventSubscribeRequest.getChannelName());
-            replayChaincodeEvents(netObj,eventSubscribeRequest.getChaincode(),
-                    eventSubscribeRequest.getStartBlockNumber(),eventSubscribeRequest.getEndBlockNumber());
+            replayChaincodeEvents(netObj, eventSubscribeRequest.getChaincode(),
+                    eventSubscribeRequest.getStartBlockNumber(), eventSubscribeRequest.getEndBlockNumber());
         } catch (Exception e) {
             log.debug("subscribeContractEvents exception:" + e);
             throw new DemoAppException("subscribeContractEvents exception:" + e);
@@ -167,25 +158,33 @@ public class HLFServices {
 
     }
 
-    private void replayChaincodeEvents(Network netObj,String chaincodeName,final long startBlock,final long endBlock) {
+    private void replayChaincodeEvents(Network netObj, String chaincodeName, final long startBlock, final long endBlock) {
         log.debug("\n*** Start chaincode event replay");
+        try {
+            var request = netObj.newChaincodeEventsRequest(chaincodeName)
+                    .startBlock(startBlock)
+                    .build();
 
-        var request = netObj.newChaincodeEventsRequest(chaincodeName)
-                .startBlock(startBlock)
-                .build();
+            try (var eventIter = request.getEvents()) {
+                while (eventIter.hasNext()) {
+                    var event = eventIter.next();
+                    var payload = prettyJson(event.getPayload());
+                    log.debug("\n<-- Chaincode event replayed: " +"Block number:"+event.getBlockNumber()+"-"+ event.getEventName() + " - " + payload);
+                    if (event.getBlockNumber() == endBlock) {
+                        // Reached the end block-Listener stops
+                        break;
+                    }
+                    // Insert data into the event_details table eventTable
+                    dBServices.insertEventData( chaincodeName, "CONTRACT", event.getEventName(), payload, new Date());
 
-        try (var eventIter = request.getEvents()) {
-            while (eventIter.hasNext()) {
-                var event = eventIter.next();
-                var payload = prettyJson(event.getPayload());
-                log.debug("\n<-- Chaincode event replayed: " + event.getEventName() + " - " + payload);
-                if (event.getBlockNumber()==endBlock) {
-                    // Reached the end block so break to close the iterator and stop listening for events
-                    break;
                 }
             }
+        } catch (Exception e) {
+            log.debug("replayChaincodeEvents exception:" + e);
+            throw new DemoAppException("replayChaincodeEvents exception:" + e);
         }
     }
+
 
     private String prettyJson(final byte[] json) {
         return prettyJson(new String(json, StandardCharsets.UTF_8));
@@ -199,7 +198,7 @@ public class HLFServices {
     public String getEventSubscribeList() {
         log.debug("FabricEventListener:subscribeObjectMap :" + subscribeObjectMap.toString());
         JSONObject result = new JSONObject();
-        result.put("SubscriptionList",subscribeObjectMap.keySet().toString());
+        result.put("SubscriptionList", subscribeObjectMap.keySet().toString());
         return result.toString();
         //return subscribeObjectMap.keySet().toString();
 
@@ -222,7 +221,7 @@ public class HLFServices {
             long blockHeight = info.getHeight();
             log.debug("blockHeight :" + blockHeight);
             JSONObject result = new JSONObject();
-            result.put("blockHeight",blockHeight);
+            result.put("blockHeight", blockHeight);
             return result.toString();
         } catch (Exception e) {
             log.debug("HLF getBlockHeight exception:" + e);
