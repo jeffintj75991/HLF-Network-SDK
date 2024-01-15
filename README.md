@@ -11,6 +11,6 @@ Most implementations with a blockchain component also have an off-chain componen
 Block events <br>
 Chaincode events <br>
 Transaction events <br>
-In this implementation, chaincode events are used, and event capturing takes place at the Fabric SDK level.The data from the events are stored in the H2 database.
+In this implementation, chaincode events are used.The event capturing is takes place at the Fabric SDK part.The data from the events are stored in the H2 database.
 <br>
 The commands and request formats required for the project are detailed in a separate file named commands_and_request
