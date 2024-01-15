@@ -1,0 +1,34 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  justify-content: flex-start; 
+  padding: 100px;
+}
+
+h1 {
+  align-self: right;
+  margin-top: -70px; 
+  margin-bottom: 100px;
+  
+}
+
+.form-container {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.response-container {
+  margin-top: -1250px; 
+  margin-left: auto; 
+  padding-right: 0; 
+  text-align: right; 
+}
+
+.form-container.subscribe-event {
+  text-align: left;
+  margin-right: 6000px;
+}
+
+
+
