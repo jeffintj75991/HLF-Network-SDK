@@ -1,12 +1,9 @@
+source ../../net-config.env
 
-# Delete existing artifacts
-rm genesis.block mychannel.tx
-rm -rf ../../channel-artifacts/*
-
-#Generate Crypto artifactes for organizations
-# cryptogen generate --config=./crypto-config.yaml --output=./crypto-config/
-
-
+createArtifacts() {
+# Store paths in variables
+ARTIFACTS_DIR="../../channel-artifacts"
+CONFIG_PATH="."
 
 # System channel
 SYS_CHANNEL="sys-channel"
@@ -14,20 +11,24 @@ SYS_CHANNEL="sys-channel"
 # channel name defaults to "mychannel"
 CHANNEL_NAME="mychannel"
 
-echo $CHANNEL_NAME
+# Use a loop for organizations passed as arguments
+for ORG in "$@"; do
+    echo "#######    Generating anchor peer update for $ORG  ##########"
+    configtxgen -profile BasicChannel -configPath "$CONFIG_PATH" -outputAnchorPeersUpdate ./"$ORG"anchors.tx -channelID "$CHANNEL_NAME" -asOrg "$ORG"
+done
+
+# Combine rm commands
+rm genesis.block mychannel.tx "$ARTIFACTS_DIR"/*
 
 # Generate System Genesis block
-configtxgen -profile OrdererGenesis -configPath . -channelID $SYS_CHANNEL  -outputBlock ./genesis.block
-
+configtxgen -profile OrdererGenesis -configPath "$CONFIG_PATH" -channelID "$SYS_CHANNEL" -outputBlock ./genesis.block
 
 # Generate channel configuration block
-configtxgen -profile BasicChannel -configPath . -outputCreateChannelTx ./mychannel.tx -channelID $CHANNEL_NAME
+configtxgen -profile BasicChannel -configPath "$CONFIG_PATH" -outputCreateChannelTx ./mychannel.tx -channelID "$CHANNEL_NAME"
 
-echo "#######    Generating anchor peer update for Org1MSP  ##########"
-configtxgen -profile BasicChannel -configPath . -outputAnchorPeersUpdate ./Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
+echo "Script executed successfully."
+}
 
-echo "#######    Generating anchor peer update for Org2MSP  ##########"
-configtxgen -profile BasicChannel -configPath . -outputAnchorPeersUpdate ./Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
-
-echo "#######    Generating anchor peer update for Org3MSP  ##########"
-configtxgen -profile BasicChannel -configPath . -outputAnchorPeersUpdate ./Org3MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org3MSP
+# Call the function with the desired organizations
+#createArtifacts "Org1MSP" "Org2MSP" "Org3MSP"
+createArtifacts "${ORGS_MSPS[@]}"
