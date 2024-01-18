@@ -5,7 +5,8 @@ cd $PWD/artifacts/channel/create-certificate-with-ca/
 echo "Setting up Certificate organisations..."
 docker-compose up -d &&
 echo "Setting up Certificates..."
-./create-certificate-with-ca.sh &&
+./create-certificate-with-ca-org.sh &&
+./create-certificate-with-ca-orderer.sh &&
 cd ..
 echo "Setting up channel artifacts..."
 ./create-artifacts.sh &&
@@ -23,6 +24,4 @@ echo "Private chaincode deployment.."
 ./deployPrivateCC.sh &&
 
 echo "Hyperledger fabric network setup is completed"
-                                  
-
-                                            
+ 
