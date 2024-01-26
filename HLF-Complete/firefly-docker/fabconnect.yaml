@@ -13,7 +13,7 @@ events:
   leveldb:
     path: /fabconnect/events
 http:
-  port: 3000
+  port: 4000
 rpc:
   useGatewayClient: true
   configpath: /fabconnect/ccp.yaml
