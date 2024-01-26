@@ -66,5 +66,74 @@ Request Formats:
     "endBlockNumber":20
 }
 
+For using Firefly FabConnect:
+Before proceeding to the following steps,replace the hostname in ccp.yaml file
+cd firefly-docker
+docker-compose up -d
 
+In browser go to localhost:4000/api to access the Firefly FabConnect
+
+For running the transactions:
+
+//Private submit transactions
+
+in /transactions :
+{
+  "headers": {
+    "type": "SendTransaction",
+    "signer": "admin",
+    "channel": "mychannel",
+    "chaincode": "test-private-cc-1"
+  },
+  "func": "saveDetails",
+  "args": ["org-collection","PRV0001", "{\"Name\": \"John\", \"Place\": \"India\"}"],
+  "transientMap": {},
+  "init": false
+}
+
+//private querying 
+
+In /query :
+
+{
+  "headers": {
+    "signer": "admin",
+    "channel": "mychannel",
+    "chaincode": "test-private-cc-1"
+  },
+  "func": "getDetails",
+  "args": ["org-collection","PRV0001"],    
+  "strongread": false
+}
+
+//Public submit transactions
+
+
+in /transactions :
+{
+  "headers": {
+    "type": "SendTransaction",
+    "signer": "admin",
+    "channel": "mychannel",
+    "chaincode": "test-public-cc-1"
+  },
+  "func": "saveDetails",
+  "args": ["PUB0001", "{\"Name\": \"John\", \"Place\": \"Germany\"}"],
+  "transientMap": {},
+  "init": false
+}
+
+//public querying 
+
+In /query :
+{
+  "headers": {
+    "signer": "admin",
+    "channel": "mychannel",
+    "chaincode": "test-public-cc-1"
+  },
+  "func": "getDetails",
+  "args": ["PUB0001"],    
+  "strongread": false
+}
 
