@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.hyperledger.fabric.client.Contract;
 import org.hyperledger.fabric.client.Network;
 import org.hyperledger.fabric.client.Proposal;
