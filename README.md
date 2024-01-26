@@ -2,7 +2,8 @@
 A full stack Hyperledger fabric application
 <br>
 In this project,a full stack Hyperledger fabric application is implemented with Hyperledger Fabric network, Spring Boot-based customized Fabric SDK , front end based on React and H2 database <br>
- The Hyperledger Fabric network consists of 3 organizations, their corresponding certificate authorities, and 3 orderers.
+ The Hyperledger Fabric network consists of 3 organizations, their corresponding certificate authorities, and 3 orderers. <br>
+Apart from the UI implementation ,Firefly-Fabconnect implementation is also present.With that also we can interact with the Hyperledger Fabric network <br>
 <br>
 There are two types of chaincodes in our project: <br>
 Public chaincodes: Transactions visible to all participants in the network. <br>
