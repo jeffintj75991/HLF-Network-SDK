@@ -6,7 +6,6 @@ In this project,a full stack Hyperledger fabric application is implemented with 
  The Hyperledger Fabric network consists of 3 organizations, their corresponding certificate authorities, and 3 orderers.
  <br>
 Apart from the UI implementation ,Firefly-Fabconnect implementation is also present.With that also we can interact with the Hyperledger Fabric network <br>
-<br>
 Hyperledger Explorer is also implemented in this project.With that we can observe the network details.
 <br>
 There are two types of chaincodes in our project: 
