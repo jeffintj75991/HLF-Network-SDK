@@ -67,7 +67,7 @@ public class HLFConnection {
     private ManagedChannel newGrpcConnection(){
         try {
             Path CRYPTO_PATH = Paths.get(cryptoPath);
-            Path TLS_CERT_PATH = CRYPTO_PATH.resolve(Paths.get("peers/peer0.org1.example.com/tls/ca.crt"));
+            Path TLS_CERT_PATH = CRYPTO_PATH.resolve(Paths.get(tlsCert));
             var credentials = TlsChannelCredentials.newBuilder()
                     .trustManager(TLS_CERT_PATH.toFile())
                     .build();
@@ -82,7 +82,7 @@ public class HLFConnection {
     private Identity newIdentity() {
         try {
             Path CRYPTO_PATH = Paths.get(cryptoPath);
-            Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get("users/User1@org1.example.com/msp/signcerts/cert.pem"));
+            Path CERT_PATH = CRYPTO_PATH.resolve(Paths.get(userCert));
 
             var certReader = Files.newBufferedReader(CERT_PATH);
             var certificate = Identities.readX509Certificate(certReader);
