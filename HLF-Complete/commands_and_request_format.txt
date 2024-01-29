@@ -4,6 +4,7 @@ cd FabricNetwork
 
 To run the Hyperledger explorer:
 //Create the docker network
+cd HLF-explorer
 docker network create net_test
 docker-compose up -d
 
