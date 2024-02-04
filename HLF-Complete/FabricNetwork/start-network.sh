@@ -22,6 +22,8 @@ echo "Public chaincode deployment.."
 ./deployPublicCC.sh &&
 echo "Private chaincode deployment.."               
 ./deployPrivateCC.sh &&
+echo "External chaincode as a service deployment.."               
+./deployExternalCC.sh &&
 
 echo "Hyperledger fabric network setup is completed"
  
