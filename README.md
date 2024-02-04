@@ -12,9 +12,12 @@ There are three types of chaincodes in our project:
 <br>
 Public chaincodes: Transactions visible to all participants in the network. 
 <br>
+<br>
 Chaincodes using Private Data collections: Transactions visible only to the participants involved in the transactions.
 <br>
+<br>
 Running Chaincode as an External Service : Instead of building and launching the chaincode on every peer, chaincode is running as a service, external to Fabric
+<br>
 <br>
 Most implementations with a blockchain component also have an off-chain component, making it essential to transfer data from on-chain to off-chain parts. This is achieved by emitting events when a transaction occurs. There are three main types of events:
 <br>
