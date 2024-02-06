@@ -1,18 +1,20 @@
+
 # SPDX-License-Identifier: Apache-2.0
-version: "3.7"
+version: '3.7'
 
 volumes:
   pgdata:
   walletstore:
 
 networks:
-  mynetwork.com:
-    external:
-      name: net_test
+  test:
+   name: artifacts_test
+
 
 services:
+
   explorerdb.mynetwork.com:
-    image: hyperledger/explorer-db:latest
+    image: ghcr.io/hyperledger-labs/explorer-db:latest
     container_name: explorerdb.mynetwork.com
     hostname: explorerdb.mynetwork.com
     environment:
@@ -27,10 +29,10 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - mynetwork.com
+      - test
 
   explorer.mynetwork.com:
-    image: hyperledger/explorer:latest
+    image: ghcr.io/hyperledger-labs/explorer:2.0.0
     container_name: explorer.mynetwork.com
     hostname: explorer.mynetwork.com
     environment:
@@ -38,20 +40,20 @@ services:
       - DATABASE_DATABASE=fabricexplorer
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWD=password
-      - LOG_LEVEL_APP=debug
-      - LOG_LEVEL_DB=debug
-      - LOG_LEVEL_CONSOLE=info
+      - LOG_LEVEL_APP=info
+      - LOG_LEVEL_DB=info
+      - LOG_LEVEL_CONSOLE=debug
       - LOG_CONSOLE_STDOUT=true
       - DISCOVERY_AS_LOCALHOST=false
+      - PORT=${PORT:-8080}
     volumes:
       - ./config.json:/opt/explorer/app/platform/fabric/config.json
       - ./first-network.json:/opt/explorer/app/platform/fabric/first-network.json
-      - ../artifacts/channel/crypto-config:/tmp/crypto
-      - walletstore:/opt/explorer/wallet
+      - ../artifacts/channel/crypto-config:/etc/data
     ports:
-      - 8080:8080
+      - 8081:8080
     depends_on:
       explorerdb.mynetwork.com:
         condition: service_healthy
     networks:
-      - mynetwork.com
+      - test
