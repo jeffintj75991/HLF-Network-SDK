@@ -1,7 +1,7 @@
 {
     "name": "test-external-cc",
     "version": "1.0.0",
-    "description": "Asset Transfer Basic contract implemented in JavaScript",
+    "description": "External chaincode  implemented in JavaScript",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
     "engines": {
