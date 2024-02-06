@@ -8,7 +8,7 @@ cd HLF-explorer
 //Replace priv_sk name in the first-network.json file
 docker-compose up -d
 
-In the browser go to ,localhost:8081 -All the network related details will be available in Hyperledger explorer
+In the browser go to ,localhost:8081.In the login page,pass the username and password mentioned in the first-network.json file -All the network related details will be available in Hyperledger explorer
 
 To run the SDK, follow these steps:
 1.Build the project using IntelliJ or any other IDE. 
