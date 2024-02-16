@@ -40,6 +40,8 @@ public class HLFConnection {
     @Value("${hlf.override.auth}")
     private String overrideAuth;
 
+    private ManagedChannel managedChannel;
+
     public Network connectionCreation(String channelName) {
         var channel = newGrpcConnection();
         try {
@@ -57,9 +59,6 @@ public class HLFConnection {
             throw new DemoAppException("connectionCreation exception:" + e);
         }
 
-//        finally {
-//            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-//        }
 
     }
 
@@ -71,9 +70,10 @@ public class HLFConnection {
             var credentials = TlsChannelCredentials.newBuilder()
                     .trustManager(TLS_CERT_PATH.toFile())
                     .build();
-            return Grpc.newChannelBuilder(peerEndpoint, credentials)
+            managedChannel= Grpc.newChannelBuilder(peerEndpoint, credentials)
                     .overrideAuthority(overrideAuth)
                     .build();
+            return managedChannel;
         } catch (Exception e) {
             throw new DemoAppException("newGrpcConnection exception:" + e);
         }
@@ -106,5 +106,10 @@ public class HLFConnection {
         }
     }
 
+    public void destroy() throws InterruptedException {
+        if (managedChannel != null) {
+            managedChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        }
+    }
 
 }
