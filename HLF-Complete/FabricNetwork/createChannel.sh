@@ -30,26 +30,17 @@ setGlobalsForPeer0Org3(){
     
 }
 
-createChannel(){
-    rm -rf ./channel-artifacts/*
-    setGlobalsForPeer0Org1
-    
-    peer channel create -o localhost:7050 -c $CHANNEL_NAME \
-    --ordererTLSHostnameOverride orderer.example.com \
-    -f ./artifacts/channel/${CHANNEL_NAME}.tx --outputBlock ./channel-artifacts/${CHANNEL_NAME}.block \
-    --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
-}
-
 joinChannel(){
     setGlobalsForPeer0Org1
-    peer channel join -b ./channel-artifacts/$CHANNEL_NAME.block
-    
+   
+    peer channel join -b ./artifacts/channel/mychannel.block
+
     
     setGlobalsForPeer0Org2
-    peer channel join -b ./channel-artifacts/$CHANNEL_NAME.block
+    peer channel join -b ./artifacts/channel/mychannel.block
     
     setGlobalsForPeer0Org3
-    peer channel join -b ./channel-artifacts/$CHANNEL_NAME.block
+   peer channel join -b ./artifacts/channel/mychannel.block
     
 }
 
@@ -65,6 +56,5 @@ updateAnchorPeers(){
     
 }
 
-createChannel
 joinChannel
-updateAnchorPeers
+#updateAnchorPeers
