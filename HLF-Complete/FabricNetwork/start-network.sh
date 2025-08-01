@@ -12,8 +12,10 @@ echo "Setting up channel artifacts..."
 ./create-artifacts.sh &&
 cd ..
 echo "Setting up Peer organisations..."
-docker-compose up -d &&    
-cd .. 
+docker-compose up -d && 
+cd ..
+echo "Joining the orderers to the channel.."
+./orderer_joining.sh &&   
 sleep 5 &&  
 echo "Setting up channel..."               
 ./createChannel.sh &&
