@@ -69,8 +69,6 @@ class TestPublicCC extends Contract {
 
         const messageStruct = JSON.parse(propertiesBuffer.toString());
 
-        const transientMap = ctx.stub.getTransient();
-
         messageStruct.payloadHash = payloadHash;
 
         await ctx.stub.putState(id, Buffer.from(JSON.stringify(messageStruct)));
