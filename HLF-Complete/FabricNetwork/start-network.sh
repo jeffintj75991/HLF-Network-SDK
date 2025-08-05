@@ -16,7 +16,7 @@ docker-compose up -d &&
 cd ..
 echo "Joining the orderers to the channel.."
 ./orderer_joining.sh &&   
-sleep 5 &&  
+sleep 10 &&  
 echo "Setting up channel..."               
 ./createChannel.sh &&
 sleep 2 &&
